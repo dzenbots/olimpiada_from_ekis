@@ -110,3 +110,6 @@ class OlimpLoader:
         await download.save_as(path)
         await new_page.close()
         return str(path)
+
+    async def close(self):
+        await self._browser.close()
