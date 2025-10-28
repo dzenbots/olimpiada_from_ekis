@@ -1,4 +1,4 @@
-from peewee import Model, TextField
+from peewee import Model, TextField, CharField
 
 from database import db
 
@@ -9,8 +9,11 @@ class BaseModel(Model):
 
 
 class OlimpField(BaseModel):
-    filename = TextField()
-    comment = TextField()
+    date = CharField()
+    subject = CharField()
+    students_list_link = TextField()
+    classes = CharField()
+    protocols_link = TextField()
 
 
 def initialize_db():

@@ -1,5 +1,5 @@
-from .env_config import MayakConfig
+from .env_config import Config
 
-config = MayakConfig.load()
+config = Config.load()
 
-__all__ = ['config', 'MayakConfig']
+__all__ = ['config', 'Config']

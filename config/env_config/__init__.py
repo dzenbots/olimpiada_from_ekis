@@ -1,3 +1,3 @@
-from .config import MayakConfig
+from .config import Config
 
-__all__ = ["MayakConfig"]
+__all__ = ["Config"]
