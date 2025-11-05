@@ -41,20 +41,25 @@ class OlimpLoader:
         await self._page.locator("#btn_login_submit").click()
         await asyncio.sleep(5)
 
-    async def look_for_olimp_files(self) -> list[OlimpFile]:
+    async def look_for_olimp_files(self, table_name: str) -> list[OlimpFile]:
         await self._page.goto(self._ekis_base_url)
         await self._page.wait_for_selector(
             ".x-panel-body.x-grid-with-row-lines.x-grid-body.x-panel-body-default.x-panel-body-default.x-noborder-rbl")
         await self._page.locator(
             ".x-panel-body.x-grid-with-row-lines.x-grid-body.x-panel-body-default.x-panel-body-default.x-noborder-rbl").get_by_role(
             "link",
-            name="Информация для мест проведения (МПО) муниципального этапа ВсОШ 2025-2026 уч. года").click()
+            name=table_name).click()
         await self._page.wait_for_selector(
             ".x-panel-body.x-grid-with-col-lines.x-grid-with-row-lines.x-grid-body.x-panel-body-default.x-panel-body-default.x-noborder-rl.x-resizable.x-panel-body-resizable.x-panel-body-default-resizable")
         await asyncio.sleep(5)
-        soup = BeautifulSoup(await self._page.locator(".x-panel-body.x-grid-with-col-lines.x-grid-with-row-lines.x-grid-body.x-panel-body-default.x-panel-body-default.x-noborder-rl.x-resizable.x-panel-body-resizable.x-panel-body-default-resizable").locator(".x-grid-item-container").evaluate(
-            "el => el.outerHTML"),
-                             "html.parser")
+        soup = BeautifulSoup(
+            await self._page.locator(
+                ".x-panel-body.x-grid-with-col-lines.x-grid-with-row-lines.x-grid-body.x-panel-body-default.x-panel-body-default.x-noborder-rl.x-resizable.x-panel-body-resizable.x-panel-body-default-resizable").locator(
+                ".x-grid-item-container"
+            ).evaluate(
+                "el => el.outerHTML"
+            ),
+            "html.parser")
         rows = soup.find_all("table")
         current_files: list[OlimpFile] = []
         for table in rows:
@@ -111,5 +116,5 @@ class OlimpLoader:
         await new_page.close()
         return str(path)
 
-    async def close(self):
-        await self._browser.close()
+async def close(self):
+    await self._browser.close()
