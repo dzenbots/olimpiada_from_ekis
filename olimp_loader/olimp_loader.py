@@ -49,6 +49,17 @@ class OlimpLoader:
             ".x-panel-body.x-grid-with-row-lines.x-grid-body.x-panel-body-default.x-panel-body-default.x-noborder-rbl").get_by_role(
             "link",
             name=table_name).click()
+        await asyncio.sleep(5)
+        await self._page.wait_for_selector(
+            ".x-toolbar.x-box-item.x-toolbar-item.x-toolbar-default.x-box-layout-ct.x-grid-paging-toolbar"
+        )
+        buttons = self._page.locator(
+            ".x-toolbar.x-box-item.x-toolbar-item.x-toolbar-default.x-box-layout-ct.x-grid-paging-toolbar"
+        ).locator(
+            ".x-btn.x-unselectable.x-box-item.x-toolbar-item.x-btn-plain-toolbar-small"
+        )
+        last_button = buttons.nth(3)
+        await last_button.click()
         await self._page.wait_for_selector(
             ".x-panel-body.x-grid-with-col-lines.x-grid-with-row-lines.x-grid-body.x-panel-body-default.x-panel-body-default.x-noborder-rl.x-resizable.x-panel-body-resizable.x-panel-body-default-resizable")
         await asyncio.sleep(5)
@@ -116,5 +127,5 @@ class OlimpLoader:
         await new_page.close()
         return str(path)
 
-async def close(self):
-    await self._browser.close()
+    async def close(self):
+        await self._browser.close()
