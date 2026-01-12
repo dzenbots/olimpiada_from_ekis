@@ -15,8 +15,8 @@ class OlimpFile:
     date: str
     subject: str
     students_list_link: str
-    classes: str
-    protocols_link: str
+    # classes: str
+    # protocols_link: str
 
 
 class OlimpLoader:
@@ -50,22 +50,22 @@ class OlimpLoader:
             "link",
             name=table_name).click()
         await asyncio.sleep(5)
+        # await self._page.wait_for_selector(
+        #     ".x-toolbar.x-box-item.x-toolbar-item.x-toolbar-default.x-box-layout-ct.x-grid-paging-toolbar"
+        # )
+        # buttons = self._page.locator(
+        #     ".x-toolbar.x-box-item.x-toolbar-item.x-toolbar-default.x-box-layout-ct.x-grid-paging-toolbar"
+        # ).locator(
+        #     ".x-btn.x-unselectable.x-box-item.x-toolbar-item.x-btn-plain-toolbar-small"
+        # )
+        # last_button = buttons.nth(3)
+        # await last_button.click()
         await self._page.wait_for_selector(
-            ".x-toolbar.x-box-item.x-toolbar-item.x-toolbar-default.x-box-layout-ct.x-grid-paging-toolbar"
-        )
-        buttons = self._page.locator(
-            ".x-toolbar.x-box-item.x-toolbar-item.x-toolbar-default.x-box-layout-ct.x-grid-paging-toolbar"
-        ).locator(
-            ".x-btn.x-unselectable.x-box-item.x-toolbar-item.x-btn-plain-toolbar-small"
-        )
-        last_button = buttons.nth(3)
-        await last_button.click()
-        await self._page.wait_for_selector(
-            ".x-panel-body.x-grid-with-col-lines.x-grid-with-row-lines.x-grid-body.x-panel-body-default.x-panel-body-default.x-noborder-rl.x-resizable.x-panel-body-resizable.x-panel-body-default-resizable")
+            "." + "x-panel-body x-grid-with-col-lines x-grid-with-row-lines x-grid-body x-panel-body-default x-panel-body-default x-noborder-rl x-resizable x-panel-body-resizable x-panel-body-default-resizable".replace(" ", "."))
         await asyncio.sleep(5)
         soup = BeautifulSoup(
             await self._page.locator(
-                ".x-panel-body.x-grid-with-col-lines.x-grid-with-row-lines.x-grid-body.x-panel-body-default.x-panel-body-default.x-noborder-rl.x-resizable.x-panel-body-resizable.x-panel-body-default-resizable").locator(
+                "." + "x-panel-body x-grid-with-col-lines x-grid-with-row-lines x-grid-body x-panel-body-default x-panel-body-default x-noborder-rl x-resizable x-panel-body-resizable x-panel-body-default-resizable".replace(" ", ".")).locator(
                 ".x-grid-item-container"
             ).evaluate(
                 "el => el.outerHTML"
@@ -77,16 +77,16 @@ class OlimpLoader:
             tr = table.find_all("tr")[0]
             date = tr.find_all("td")[2].text
             subject = tr.find_all("td")[3].text
-            students_list_link = tr.find_all("td")[6].text if tr.find_all("td")[6].text.startswith("http") else ""
-            protocols_link = tr.find_all("td")[8].text if tr.find_all("td")[8].text.startswith("http") else ""
-            classes = tr.find_all("td")[4].text if tr.find_all("td")[4].text[0].isdigit() else ""
+            students_list_link = tr.find_all("td")[5].text if tr.find_all("td")[5].text.startswith("http") else ""
+            # protocols_link = tr.find_all("td")[8].text if tr.find_all("td")[8].text.startswith("http") else ""
+            # classes = tr.find_all("td")[4].text if tr.find_all("td")[4].text[0].isdigit() else ""
             current_files.append(
                 OlimpFile(
                     date=date,
                     subject=subject,
                     students_list_link=students_list_link,
-                    protocols_link=protocols_link,
-                    classes=classes
+                    # protocols_link=protocols_link,
+                    # classes=classes
                 )
             )
         return current_files
@@ -98,8 +98,8 @@ class OlimpLoader:
                 date=file.date,
                 subject=file.subject,
                 students_list_link=file.students_list_link,
-                protocols_link=file.protocols_link,
-                classes=file.classes
+                # protocols_link=file.protocols_link,
+                # classes=file.classes
             ) for file in OlimpField.select()
         ]
         for current_file in current_files:
@@ -108,8 +108,8 @@ class OlimpLoader:
                     date=current_file.date,
                     subject=current_file.subject,
                     students_list_link=current_file.students_list_link,
-                    protocols_link=current_file.protocols_link,
-                    classes=current_file.classes
+                    # protocols_link=current_file.protocols_link,
+                    # classes=current_file.classes
                 )
                 new_files.append(current_file)
         return new_files

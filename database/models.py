@@ -12,8 +12,8 @@ class OlimpField(BaseModel):
     date = CharField()
     subject = CharField()
     students_list_link = TextField()
-    classes = CharField()
-    protocols_link = TextField()
+    # classes = CharField()
+    # protocols_link = TextField()
 
 
 def initialize_db():
